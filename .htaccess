@@ -1,0 +1,16 @@
+<IfModule mod_negotiation.c>
+    Options -MultiViews
+</IfModule>
+
+IndexIgnore *
+RewriteEngine On
+
+# Disable protected folders and files
+RewriteRule (^\.|\/\.|^system/|system$) index.php [L]
+
+# Check file or folders exists
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Redirect all urls to index.php if no exits files/folder
+RewriteRule ^ index.php [L]

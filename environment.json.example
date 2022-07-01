@@ -1,0 +1,14 @@
+{
+    "development": "true",
+    "tokens": [
+        {
+            "token": "nyARrvQRTruam9XS",
+            "label": "Meu aplicativo",
+            "permissions": [
+                "collection.*",
+                "store.*",
+                "query.run"
+            ]
+        }
+    ]
+}
