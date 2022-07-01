@@ -4,7 +4,7 @@ function run_query($query): array
 {
     require_param($query->collection, "collection");
     validate_permission("collection." . $query->collection . ".read");
-    
+
     $output = [];
     $collection_root = STORAGE_PATH . $query->collection;
     if (!is_dir($collection_root)) {
@@ -17,6 +17,9 @@ function run_query($query): array
     if (isset($query->pagination)) {
         $skip = $query->pagination->skip ?? 0;
         $take = $query->pagination->take ?? 2147483647;
+    } else {
+        $skip = 0;
+        $take = 2147483647;
     }
 
     $select_all = in_array("*", $query->select ?? []);
