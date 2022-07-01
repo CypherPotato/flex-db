@@ -3,6 +3,6 @@
 composer.lock
 system/unfinished/
 system/vendor/
-system/storage/*
+storage/
 php_errors.log
 environment.json
