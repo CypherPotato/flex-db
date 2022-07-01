@@ -1,0 +1,71 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "fe3a69f8ea454f3f685a49ce2c5da927",
+    "packages": [
+        {
+            "name": "inphinit/framework",
+            "version": "0.5.17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/inphinit/framework.git",
+                "reference": "3d7592182461670a604e46568c647adb86578a3a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/inphinit/framework/zipball/3d7592182461670a604e46568c647adb86578a3a",
+                "reference": "3d7592182461670a604e46568c647adb86578a3a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Inphinit\\": "src/Inphinit",
+                    "Inphinit\\Experimental\\": "src/Experimental"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Nascimento",
+                    "email": "brcontainer@yahoo.com.br"
+                }
+            ],
+            "description": "A framework for easy creation of routes",
+            "keywords": [
+                "api",
+                "dom",
+                "framework",
+                "http",
+                "rest",
+                "routing",
+                "url"
+            ],
+            "support": {
+                "issues": "https://github.com/inphinit/framework/issues",
+                "source": "https://github.com/inphinit/framework/tree/0.5.17"
+            },
+            "time": "2022-04-04T09:25:18+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": true,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.3.0"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
+}
