@@ -9,7 +9,7 @@ function run_query($query): array
     $collection_root = STORAGE_PATH . $query->collection;
     if (!is_dir($collection_root)) {
         add_message("error", "Target collection does not exists.");
-        return json_response();
+        return [];
     }
 
     $schema = json_decode(file_get_contents($collection_root . "/collection.json"), true)["schema"];

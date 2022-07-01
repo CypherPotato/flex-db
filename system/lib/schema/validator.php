@@ -39,7 +39,7 @@ trait validate
             }
 
             if ($tokens[$key]["pattern"] != "-") {
-                preg_match($tokens[$key]["pattern"], $value, $match);
+                preg_match($tokens[$key]["pattern"], $value ?? "", $match);
                 if (count($match) == 0) {
                     add_message($message_level, "Field \"$key\" does't match the expected field pattern.");
                     return false;
