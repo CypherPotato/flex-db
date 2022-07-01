@@ -9,13 +9,11 @@ $GLOBALS["supress-messaging"] = false;
 $__input = file_get_contents('php://input');
 $GLOBALS["raw_request"] = $__input;
 if (!empty($__input)) {
-    if ($_SERVER["CONTENT_TYPE"] == "application/json") {
-        $GLOBALS["request"] = json_decode($__input, false);
-        if ($GLOBALS["request"] == null && $_SERVER['REQUEST_METHOD'] != "GET") {
-            add_message("error", "Invalid JSON data received");
-            json_response([], true);
-            die();
-        }
+    $GLOBALS["request"] = json_decode($__input, false);
+    if ($GLOBALS["request"] == null && $_SERVER['REQUEST_METHOD'] != "GET") {
+        add_message("error", "Invalid JSON data received");
+        json_response([], true);
+        die();
     }
 }
 
