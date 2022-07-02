@@ -30,8 +30,12 @@ function run_query($query): array
         while (false !== ($file = readdir($handle))) {
             if ($file == "." || $file == "..") continue;
 
-            $file_contents = file_get_contents($collection_root . "/data/" . $file);
-            $object = json_decode($file_contents, true);
+            $file_path = $collection_root . "/data/" . $file;
+            $file_contents = file_get_contents($file_path);
+            $object = [
+                "created_at" => filectime($file_path),
+                "updated_at" => filemtime($file_path)
+            ] + json_decode($file_contents, true);
 
             if (isset($query->where)) {
                 foreach ($query->where as $field => $pattern) {
@@ -54,13 +58,26 @@ function run_query($query): array
             }
 
             if ($normalize) {
-                $output[] = array_intersect_key($object, $schema + ["id" => ""]);
+                $output[] = array_intersect_key($object, $schema + ["id" => "", "created_at" => "", "updated_at" => ""]);
             } else {
                 $output[] = $object;
             }
         }
 
         closedir($handle);
+
+        //order results
+        if(isset($query->order_by)) {
+            $order_term = $query->order_term ?? "asc";
+            $order_field = $query->order_by;
+            usort($output, function($a, $b) use ($order_field, $order_term) {
+                if(strtolower($order_term) == "desc") {
+                    return strcmp($b[$order_field], $a[$order_field]);
+                } else {
+                    return strcmp($a[$order_field], $b[$order_field]);
+                }
+            });
+        }
     }
 
     return $output;

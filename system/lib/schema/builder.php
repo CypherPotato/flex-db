@@ -15,8 +15,12 @@ trait build
                 return false;
             }
 
-            if ($name == "id") {
-                add_message("error", "Illegal schema field name: \"" . $name . "\".");
+            if (
+                $name == "id"
+                or $name == "created_at"
+                or $name == "updated_at"
+            ) {
+                add_message("error", "Illegal or reserved schema field name: \"" . $name . "\".");
                 return false;
             }
 
