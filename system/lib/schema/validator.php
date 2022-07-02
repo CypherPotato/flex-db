@@ -28,7 +28,7 @@ trait validate
                 $tokens_keys[$key] = true;
             }
 
-            if (!$tokens[$key]["nullable"] && $value == null) {
+            if (!$tokens[$key]["nullable"] && is_null($value)) {
                 add_message($message_level, "Field \"$key\" cannot be null.");
                 return false;
             }
