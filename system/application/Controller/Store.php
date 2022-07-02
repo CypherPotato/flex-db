@@ -108,13 +108,20 @@ class Store
             $GLOBALS["supress-messaging"] = false;
         }
 
+        if ($GLOBALS["request"]->options->truncate ?? false) {
+            recurse_rm_dir($collection_root . "/data");
+            umkdir($collection_root . "/data", STORAGE_PERMISSION_LEVEL);
+        }
+
+        $pad = 0;
         foreach ($objects as $object) {
             $validationResult = \Schema::validate($object, $collection_schema, $skip_not_expected_fields, true);
             if ($validationResult == false) {
                 continue;
             }
 
-            $id = get_sequential_id();
+            $pad++;
+            $id = get_sequential_id($pad);
             file_put_contents($collection_root . "/data/$id.json", build_storage_object($id, $object));
             $inserted[] = $id;
         }
