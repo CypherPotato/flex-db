@@ -1,7 +1,7 @@
 {
-    "name": "inphinit/inphinit",
-    "description": "A framework for easy creation of routes",
-    "keywords": [ "framework", "routing", "url", "http", "dom", "rest", "api" ],
+    "name": "cypherpotato/flex-db",
+    "description": "Flexible and dynamic database engine in PHP",
+    "keywords": [ "db" ],
     "license": "MIT",
     "type": "project",
     "minimum-stability": "dev",
@@ -11,13 +11,14 @@
     },
     "authors": [
         {
-            "name": "Guilherme Nascimento",
-            "email": "brcontainer@yahoo.com.br"
+            "name": "CypherPotato",
+            "email": "a@b.com"
         }
     ],
     "require": {
         "php": ">=5.3.0",
-        "inphinit/framework": "^0.5"
+        "inphinit/framework": "^0.5",
+        "colinodell/json5": "^2.2"
     },
     "autoload": {
         "psr-4": {

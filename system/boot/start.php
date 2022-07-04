@@ -4,7 +4,7 @@ use Inphinit\App;
 
 require_once INPHINIT_PATH . 'vendor/inphinit/framework/src/Utils.php';
 
-//require_once INPHINIT_PATH . 'vendor/autoload.php';
+require_once INPHINIT_PATH . 'vendor/autoload.php';
 UtilsAutoload();
 
 require_once INPHINIT_PATH . 'boot/storage.php';

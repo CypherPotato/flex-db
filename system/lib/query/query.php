@@ -14,7 +14,7 @@ function run_query($query): array
 
     $schema = json_decode(file_get_contents($collection_root . "/collection.json"), true)["schema"];
 
-    if (isset($query->pagination)) {
+    if (isset($query->pagination->skip) || isset($query->pagination->take)) {
         $skip = $query->pagination->skip ?? 0;
         $take = $query->pagination->take ?? 2147483647;
     } else {
@@ -71,6 +71,8 @@ function run_query($query): array
             $order_term = $query->order_term ?? "asc";
             $order_field = $query->order_by;
             usort($output, function($a, $b) use ($order_field, $order_term) {
+                $a[$order_field] ??= "";
+                $b[$order_field] ??= "";
                 if(strtolower($order_term) == "desc") {
                     return strcmp($b[$order_field], $a[$order_field]);
                 } else {
