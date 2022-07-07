@@ -2,6 +2,7 @@
 
 function flex_query_decode($string)
 {
+    $string = trim($string);
     $root_document = substr($string, 1, strlen($string) - 2);
     $has_arguments = str_contains($root_document, "(");
 
