@@ -29,7 +29,7 @@ class Store
             if ($validationResult == false) {
                 return json_response();
             }
-        }       
+        }
 
         $id = get_sequential_id();
         file_put_contents($collection_root . "/data/$id.json", build_storage_object($id, $data_contents));
@@ -57,7 +57,8 @@ class Store
             add_message("error", "Target collection does not exists.");
             return json_response();
         }
-        $collection_schema = json_decode(file_get_contents($collection_root . "/collection.json"), true)["schema"];
+        $collection = json_decode(file_get_contents($collection_root . "/collection.json"), true);
+        $collection_schema = $collection["schema"];
 
         $file_path = $collection_root . "/data/$id.json";
         if (!is_file($file_path)) {
@@ -68,9 +69,11 @@ class Store
         $original_contents = json_decode(file_get_contents($file_path), true);
         $data_contents = array_diff_key(array_merge($original_contents, (array)$data_contents), ["id" => ""]);
 
-        $validationResult = \Schema::validate($data_contents, $collection_schema);
-        if ($validationResult == false) {
-            return json_response();
+        if(!($collection["dynamic"] ?? false)) {
+            $validationResult = \Schema::validate($data_contents, $collection_schema);
+            if ($validationResult == false) {
+                return json_response();
+            }
         }
 
         $file = $collection_root . "/data/$id.json";
@@ -99,7 +102,8 @@ class Store
             add_message("error", "Target collection does not exists.");
             return json_response();
         }
-        $collection_schema = json_decode(file_get_contents($collection_root . "/collection.json"), true)["schema"];
+        $collection = json_decode(file_get_contents($collection_root . "/collection.json"), true);
+        $collection_schema = $collection["schema"];
 
         $objects = $GLOBALS["request"]->objects;
         $inserted = [];
@@ -118,9 +122,11 @@ class Store
 
         $pad = 0;
         foreach ($objects as $object) {
-            $validationResult = \Schema::validate($object, $collection_schema, $skip_not_expected_fields, true);
-            if ($validationResult == false) {
-                continue;
+            if(!($collection["dynamic"] ?? false)) {
+                $validationResult = \Schema::validate($object, $collection_schema, $skip_not_expected_fields, true);
+                if ($validationResult == false) {
+                    continue;
+                }
             }
 
             $pad++;
