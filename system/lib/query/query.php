@@ -23,11 +23,11 @@ function run_query($query): array
         $take = 2147483647;
     }
 
-    $select_all = ($collection["dynamic"] ?? false) ? true : in_array("*", $query->select ?? []);
+    $select_all = in_array("*", $query->select ?? []);
     $index = -$skip;
     $normalize = $query->normalize ?? false;
 
-    if($normalize && $collection["dynamic"]) {
+    if ($normalize && $collection["dynamic"]) {
         add_message("error", "Cannot normalize an dynamic collection.");
         return [];
     }
@@ -64,7 +64,7 @@ function run_query($query): array
             }
 
             if ($normalize) {
-                if($select_all) {
+                if ($select_all) {
                     $intersection = $object;
                 } else {
                     $intersection = $schema + ["id" => "", "created_at" => "", "updated_at" => ""];
@@ -77,13 +77,13 @@ function run_query($query): array
         closedir($handle);
 
         //order results
-        if(isset($query->order_by)) {
+        if (isset($query->order_by)) {
             $order_term = $query->order_term ?? "asc";
             $order_field = $query->order_by;
-            usort($output, function($a, $b) use ($order_field, $order_term) {
+            usort($output, function ($a, $b) use ($order_field, $order_term) {
                 $a[$order_field] ??= "";
                 $b[$order_field] ??= "";
-                if(strtolower($order_term) == "desc") {
+                if (strtolower($order_term) == "desc") {
                     return strcmp($b[$order_field], $a[$order_field]);
                 } else {
                     return strcmp($a[$order_field], $b[$order_field]);
