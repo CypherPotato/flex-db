@@ -12,7 +12,8 @@ function run_query($query): array
         return [];
     }
 
-    $schema = json_decode(file_get_contents($collection_root . "/collection.json"), true)["schema"];
+    $collection = json_decode(file_get_contents($collection_root . "/collection.json"), true);
+    $schema = $collection["schema"];
 
     if (isset($query->pagination->skip) || isset($query->pagination->take)) {
         $skip = $query->pagination->skip ?? 0;
@@ -22,9 +23,14 @@ function run_query($query): array
         $take = 2147483647;
     }
 
-    $select_all = in_array("*", $query->select ?? []);
+    $select_all = ($collection["dynamic"] ?? false) ? true : in_array("*", $query->select ?? []);
     $index = -$skip;
     $normalize = $query->normalize ?? false;
+
+    if($normalize && $collection["dynamic"]) {
+        add_message("error", "Cannot normalize an dynamic collection.");
+        return [];
+    }
 
     if ($handle = opendir($collection_root . "/data/")) {
         while (false !== ($file = readdir($handle))) {
@@ -58,10 +64,14 @@ function run_query($query): array
             }
 
             if ($normalize) {
-                $output[] = array_intersect_key($object, $schema + ["id" => "", "created_at" => "", "updated_at" => ""]);
-            } else {
-                $output[] = $object;
+                if($select_all) {
+                    $intersection = $object;
+                } else {
+                    $intersection = $schema + ["id" => "", "created_at" => "", "updated_at" => ""];
+                    array_intersect_key($object, $intersection);
+                }
             }
+            $output[] = $object;
         }
 
         closedir($handle);

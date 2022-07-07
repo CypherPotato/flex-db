@@ -21,12 +21,15 @@ class Store
             add_message("error", "Target collection does not exists.");
             return json_response();
         }
-        $collection_schema = json_decode(file_get_contents($collection_root . "/collection.json"), true)["schema"];
+        $collection = json_decode(file_get_contents($collection_root . "/collection.json"), true);
+        $collection_schema = $collection["schema"];
 
-        $validationResult = \Schema::validate($data_contents, $collection_schema);
-        if ($validationResult == false) {
-            return json_response();
-        }
+        if(!($collection["dynamic"] ?? false)) {
+            $validationResult = \Schema::validate($data_contents, $collection_schema);
+            if ($validationResult == false) {
+                return json_response();
+            }
+        }       
 
         $id = get_sequential_id();
         file_put_contents($collection_root . "/data/$id.json", build_storage_object($id, $data_contents));

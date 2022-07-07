@@ -3,7 +3,7 @@
 use Inphinit\Routing\Route;
 
 Route::set('GET',       '/collections',                                   'Collections:browse');
-Route::set('GET',       '/collections/{:[a-zA-Z-]+?:}',                   'Collections:read');
+Route::set('GET',       '/collections/{:.*?:}',                           'Collections:read');
 Route::set('PUT',       '/collections',                                   'Collections:edit');
 Route::set('POST',      '/collections',                                   'Collections:add');
 Route::set('DELETE',    '/collections',                                   'Collections:delete');

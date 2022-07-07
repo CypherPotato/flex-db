@@ -32,18 +32,23 @@ class Collections
         require_param($GLOBALS["request"]->collection, "collection");
         require_param($GLOBALS["request"]->collection->name, "collection.name");
         require_param($GLOBALS["request"]->schema, "schema");
-
+    
         $mcollection_data = [];
         $mcollection_data["name"] = $GLOBALS["request"]->collection->name;
-
+        $mcollection_data["dynamic"] = $GLOBALS["request"]->collection->dynamic ?? false;
+   
         validate_permission("collection." . $mcollection_data["name"]  . ".write");
-
-        $schema_built = \Schema::build($GLOBALS["request"]->schema);
-        if ($schema_built == false) {
-            return json_response();
+        
+        if ($mcollection_data["dynamic"]) {
+            $mcollection_data["schema"] = new \stdClass;
+        } else {
+            $mcollection_data["schema"] = $GLOBALS["request"]->schema;
+            $schema_built = \Schema::build($GLOBALS["request"]->schema);
+            if ($schema_built == false) {
+                add_message("error", "Invalid collection schema syntax.");
+                return json_response();
+            }
         }
-
-        $mcollection_data["schema"] = $GLOBALS["request"]->schema;
 
         if (!is_valid_name($mcollection_data["name"])) {
             add_message("error", "Invalid collection name: " . $GLOBALS["request"]->collection->name);
@@ -90,6 +95,7 @@ class Collections
 
         $schema_built = \Schema::build($GLOBALS["request"]->schema);
         if ($schema_built == false) {
+            add_message("error", "Invalid collection schema syntax.");
             return json_response();
         }
 
