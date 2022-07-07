@@ -10,6 +10,7 @@ function flex_query_decode($string)
         $arguments = "{" . substr($root_document, $arg_str_b = strpos($root_document, "(") + 1, strrpos($root_document, ")") - $arg_str_b) . "}";
         $select = trim(substr($t = trim(explode(")", $root_document)[1]), 1, strlen($t) - 2));
     } else {
+        $arguments = "{}";
         $collection = trim(explode("{", $root_document)[0]);
         $select = trim(substr($t = trim(explode("{", $root_document)[1]), 0, strlen($t) - 1));
     }
