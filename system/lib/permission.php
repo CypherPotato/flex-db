@@ -3,7 +3,7 @@
 function perm($permission): int
 {
     $token = $_SERVER["HTTP_TOKEN"] ?? "";
-    $tokens = env("tokens", []);
+    $tokens = $GLOBALS["env"]["tokens"] ?? [];
     $ftoken = [];
     foreach ($tokens as $xtoken) {
         if ($token == $xtoken["token"]) {
@@ -23,7 +23,6 @@ function perm($permission): int
         $pattern = $perm;
         $pattern = str_replace(".", "\.", $pattern);
         $pattern = str_replace("*", ".*", $pattern);
-
         preg_match("/$pattern/", $permission, $match);
         if (count($match) >= 1) {
             $c = 1;
@@ -37,10 +36,10 @@ function perm($permission): int
 function validate_permission($permission, $close = true)
 {
     if (perm($permission) != 1) {
-        add_message("error", "Not authorized to perform this operation.");
         if ($close) {
+            add_message("error", "Not authorized to perform this operation.");
             json_response(null, true);
-            die();
+            exit;
         }
         return false;
     }

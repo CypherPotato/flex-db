@@ -10,6 +10,6 @@ class Query
         if ($GLOBALS["success"] == false) {
             return error_response();
         }
-        return json_response($parsed_query, false, true);
+        return json_response($parsed_query, false, true, 200);
     }
 }

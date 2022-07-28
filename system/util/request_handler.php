@@ -13,9 +13,6 @@ if (!empty($__input) && $_SERVER['REQUEST_METHOD'] != "GET") {
         case "application/json":
             $GLOBALS["request"] = json_decode($__input, false);
             break;
-        case "application/flex-query":
-            $GLOBALS["request"] = flex_query_decode($__input);
-            break;
         default:
             add_message("error", "Invalid Content-Type received.");
             json_response(null, true);
@@ -23,7 +20,7 @@ if (!empty($__input) && $_SERVER['REQUEST_METHOD'] != "GET") {
     }
 }
 
-function require_param(&$expression, $name)
+function require_param($expression, $name)
 {
     if (!isset($expression)) {
         add_message("error", "Missing parameter: " . $name);
@@ -53,7 +50,7 @@ function add_message(string $type, string $message)
     }
 }
 
-function json_response($content = null, bool $close_connection = false, $raw = false)
+function json_response($content = null, bool $close_connection = false, $raw = false, $override_http_response = 0)
 {
     header("Content-Type: application/json");
 
@@ -61,6 +58,10 @@ function json_response($content = null, bool $close_connection = false, $raw = f
         http_response_code(400);
     } else {
         http_response_code(200);
+    }
+
+    if ($override_http_response != 0) {
+        http_response_code($override_http_response);
     }
 
     if ($raw) {

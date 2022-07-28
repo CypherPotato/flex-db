@@ -27,5 +27,5 @@ define(
 
 define(
     "BOOL_PATTERN",
-    "/0|1/"
+    "-b-"
 );

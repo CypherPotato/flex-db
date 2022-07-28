@@ -1,5 +1,16 @@
 <?php
 
+function normalize_by_schema(array $object, array $schema)
+{
+    $OBJECT = [];
+    foreach ($schema as $schema_key => $schema_value) {
+        if (!key_exists($schema_key, $object)) {
+            $OBJECT[$schema_key] = null;
+        }
+    }
+    return $object + $OBJECT;
+}
+
 function run_query($query): array
 {
     require_param($query->collection, "collection");
@@ -26,8 +37,9 @@ function run_query($query): array
     $select_all = in_array("*", $query->select ?? []);
     $index = -$skip;
     $normalize = $query->normalize ?? false;
+    $filter = $query->filters ?? [];
 
-    if ($normalize && $collection["dynamic"]) {
+    if ($normalize && ($collection["dynamic"] ?? false)) {
         add_message("error", "Cannot normalize an dynamic collection.");
         return [];
     }
@@ -45,7 +57,7 @@ function run_query($query): array
 
             if (isset($query->where)) {
                 foreach ($query->where as $field => $pattern) {
-                    if (!execute_where($field, $pattern, $object)) {
+                    if (!execute_where($field, $pattern, $object, $filter)) {
                         continue 2;
                     }
                 }
@@ -65,7 +77,7 @@ function run_query($query): array
 
             if ($normalize) {
                 if ($select_all) {
-                    $intersection = $object;
+                    $object = normalize_by_schema($object, $schema);
                 } else {
                     $intersection = $schema + ["id" => "", "created_at" => "", "updated_at" => ""];
                     array_intersect_key($object, $intersection);

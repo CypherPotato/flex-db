@@ -6,10 +6,15 @@ class Collections
 {
     public function browse()
     {
-        validate_permission("collection.read");
-
         $collections = array_values(array_diff(scandir(STORAGE_PATH), [".", ".."]));
-        return json_response(["collections" => $collections]);
+        $matched_with_permission = [];
+        for ($i = 0; $i < count($collections); $i++) {
+            $collection = $collections[$i];
+            if (validate_permission("collection." . $collection . ".read", false)) {
+                $matched_with_permission [] = ($collection);
+            }
+        }
+        return json_response(["collections" => $matched_with_permission]);
     }
 
     public function read($collection)
@@ -32,13 +37,13 @@ class Collections
         require_param($GLOBALS["request"]->collection, "collection");
         require_param($GLOBALS["request"]->collection->name, "collection.name");
         require_param($GLOBALS["request"]->schema, "schema");
-    
+
         $mcollection_data = [];
         $mcollection_data["name"] = $GLOBALS["request"]->collection->name;
         $mcollection_data["dynamic"] = $GLOBALS["request"]->collection->dynamic ?? false;
-   
+
         validate_permission("collection." . $mcollection_data["name"]  . ".write");
-        
+
         if ($mcollection_data["dynamic"]) {
             $mcollection_data["schema"] = new \stdClass;
         } else {

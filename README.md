@@ -24,7 +24,7 @@ Its configuration is very simple and fast, being able to release the use of the 
 
 4. Clone the environment file with `cp environment.json.example environment.json`.
 
-Pretty simple, ya? Now, let's see how to setup the environment. Here's an environment file example:
+Pretty simple, huh? Now, let's see how to setup the environment. Here's an environment file example:
 
 ```json
 {
@@ -50,5 +50,3 @@ Pretty simple, ya? Now, let's see how to setup the environment. Here's an enviro
   - `collection.*` will grant access to query and write/edit/delete contents in the database server.
   - `collection.users.*` will grant access to read/write contents in the `users` collection. This will also match columns which "users." is a prefix.
   - `collection.business.users.read` will grand query/read access to `business.users` collection.
-
-# Schemas, collections and files
